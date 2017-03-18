@@ -1,0 +1,8 @@
+{
+  "name": "mhc2mqtt",
+  "main": "main.js",
+  "dependencies": {
+    "mqtt": "^2.4.0",
+    "unirest": "^0.5.1"
+  }
+}
