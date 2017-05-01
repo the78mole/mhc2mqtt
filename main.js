@@ -1,21 +1,35 @@
-var unirest = require('unirest');
+
+var fs = require("fs");
+var Promise = require('promise');
+var mhcRC = require("./mhcRestClient.js");
+
+var configFile = "config.json";
+
 //var bodyParser = require('body-parser');
 //var jsonParser = bodyParser.json();
 
-var mhcURL = 'http://192.168.127.20/webcom';
-var mhcUser = "script";
-var mhcPass = "script";
-var mhcHeaders = {
-	"Accept": "*/*",
-	"Accept-Encoding": "gzip, deflate",
-	"Accept-Language": "de-DE,de;q=0.8,en-US;q=0.6,en;q=0.4",
-	"Connection": "keep-alive",
-	"X-Requested-With": "XMLHttpRequest",
-	"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/55.0.2883.87 Chrome/55.0.2883.87 Safari/537.36"
-};
+console.log("Started mhc2mqtt connector.")
 
-var cid = 1234;
+// Reading config
+console.log("Reading config from file " + configFile);
+var config = JSON.parse(fs.readFileSync(configFile));
+console.log("Config read.");
 
+var mhcRCconf = config.mhcRestClient;
+
+// Creating mhcRestClient Connector Instance
+var mhc0 = mhcRC(mhcRCconf[0]);
+
+var loginPromise = mhc0.login();
+
+loginPromise.then(function(body) {
+	console.log("Promise fulfilled. Body was: " + JSON.stringify(body, null, '\t'));
+})
+
+console.log("Finished mhc2mqtt connector (should not happen).");
+
+
+/*
 unirest.post(mhcURL)
 	.headers(mhcHeaders)
 	.type("application/json-rpc")
@@ -112,3 +126,4 @@ unirest.post(mhcURL)
 		});
 
 });
+*/
